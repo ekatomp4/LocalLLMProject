@@ -1,0 +1,4 @@
+.Add multi lang support possibly
+.Running cmds and streaming output
+.Math functions
+.Saving and snapshotting

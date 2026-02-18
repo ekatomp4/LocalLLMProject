@@ -1,0 +1,28 @@
+{
+  "name": "localllmproject",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ekatomp4/LocalLLMProject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/ekatomp4/LocalLLMProject/issues"
+  },
+  "homepage": "https://github.com/ekatomp4/LocalLLMProject#readme",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "nodemon": "^3.1.11",
+    "ws": "^8.19.0"
+  }
+}
