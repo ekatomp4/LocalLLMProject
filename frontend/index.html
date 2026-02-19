@@ -4,9 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INTERFACE</title>
+    <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-    
+
+    <div id="navbar">
+        <span>INTERFACE</span>
+    </div>
+
+    <div id="content">
+        <div id="sidebar">
+
+        </div>
+        <div id="main">
+            <canvas id="mycanvas"></canvas>
+        </div>
+    </div>
+
+    <script src="libs/litegraph.js"></script>
+    <script>
+        window.LGraph = window.LGraph || null;
+        if(!window.LGraph) {
+            console.error("LiteGraph library not loaded!");
+        }
+    </script>
+
+    <script src="graph/graph.js" type="module"></script>
     <script src="./connector.js" type="module"></script>
 </body>
 </html>

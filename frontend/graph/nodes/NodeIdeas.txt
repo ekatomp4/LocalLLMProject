@@ -1,0 +1,74 @@
+Logic & Control Flow
+
+custom/logic/if_else — takes a boolean + two values, outputs one based on condition
+custom/logic/switch — routes input to one of N outputs based on a selector
+custom/logic/gate — only passes data through when a boolean input is true
+custom/logic/compare — compares two values, outputs boolean (>, <, ===, etc.)
+custom/logic/debounce — only fires after input stops changing for N ms
+
+String Operations
+
+custom/string/concat — joins two strings with optional separator
+custom/string/template — handlebars-style "Hello {{name}}" with input slots
+custom/string/split — splits string by delimiter, outputs array
+custom/string/regex — match/replace with a regex pattern
+custom/string/json_parse — parses a JSON string into an object
+custom/string/json_stringify — serializes an object to JSON string
+
+Math
+
+custom/math/clamp — clamps a number between min and max
+custom/math/lerp — linear interpolation between two values
+custom/math/random — outputs a random number in a range on each tick
+custom/math/counter — increments on each execute, resettable
+
+Data / State
+
+custom/data/store — stores a value, outputs it on demand (memory cell)
+custom/data/array_push — accumulates inputs into an array
+custom/data/array_get — gets item at index from an array
+custom/data/object_get — gets a key from an object (dot notation support)
+custom/data/object_set — sets a key on an object and outputs the result
+custom/data/merge — merges two objects together
+
+AI / LLM
+
+custom/ai/prompt_builder — assembles a system + user prompt from inputs
+custom/ai/llm_call — sends a prompt to an LLM endpoint, outputs response string
+custom/ai/token_counter — estimates token count of a string
+custom/ai/message_history — maintains a rolling array of chat messages
+custom/ai/response_parser — extracts structured fields from an LLM response
+custom/ai/embeddings — calls an embeddings endpoint, outputs a vector
+
+HTTP / Network
+
+custom/async/fetch_json — like fetch_text but parses response as JSON
+custom/async/fetch_post — POST request with a body input
+custom/async/websocket — opens a WS connection, emits on message
+custom/async/poll — repeatedly calls a URL on an interval
+
+Flow Control / Timing
+
+custom/flow/delay — passes input through after N ms
+custom/flow/throttle — limits how often output fires
+custom/flow/sequence — fires outputs one at a time in order
+custom/flow/trigger — manual button trigger to start a chain
+custom/flow/on_change — only propagates when value actually changes
+
+Output / Display
+
+custom/output/json_viewer — pretty-prints an object in the node body
+custom/output/number_display — shows a number with a label, optionally a sparkline
+custom/output/log — appends values to an in-node scrollable log
+custom/output/alert — fires a browser alert or toast notification
+
+Graph Meta (for self-expansion)
+
+custom/meta/node_spawner — takes a node type string and spawns it into the graph
+custom/meta/node_remover — removes a node by ID
+custom/meta/connect_nodes — dynamically connects two node IDs and slots
+custom/meta/graph_snapshot — serializes the entire graph to JSON
+custom/meta/graph_loader — deserializes and loads a graph from JSON
+custom/meta/eval — executes an arbitrary JS string (dangerous, sandbox carefully)
+
+The most important ones for a self-expanding AI system are the meta nodes and the ai nodes — together they let the LLM inspect the graph, decide what nodes to add, spawn them, and wire them up programmatically. graph_snapshot + llm_call + node_spawner + connect_nodes is the core loop for self-modification.
