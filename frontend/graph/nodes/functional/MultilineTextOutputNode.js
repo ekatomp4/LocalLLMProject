@@ -1,6 +1,7 @@
 export default class MultilineTextOutputNode {
     constructor() {
         this.addInput("text", 0);
+        this.addOutput("text", "string");
         this.properties = { value: "" };
         this.size = [400, 200];
         this._div = null;
@@ -15,6 +16,7 @@ export default class MultilineTextOutputNode {
             this.properties.value = String(input);
         }
         this._syncDiv();
+        this.setOutputData(0, this.properties.value);
     }
 
     _createDiv() {

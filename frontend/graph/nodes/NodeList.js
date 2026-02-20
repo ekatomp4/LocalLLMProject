@@ -6,6 +6,9 @@ import ConstantStringNode from "./constants/ConstantStringNode.js";
 import MultilineTextInputNode from "./functional/MultilineTextInputNode.js";
 import MultilineTextOutputNode from "./functional/MultilineTextOutputNode.js";
 
+// Async
+import LLMCallNode from "./functional/LLMCallNode.js";
+
 // helpers
 import ToStringNode from "./helpers/ToStringNode.js";
 import ToNumberNode from "./helpers/ToNumberNode.js";
@@ -29,6 +32,7 @@ const NodeList = {
     "custom/text/multiline_text_output": MultilineTextOutputNode,
     // functions
     "custom/async/fetch_text": FetchTextNode,
+    "custom/async/llm_call": LLMCallNode,
     // helpers
     "custom/convert/to_string": ToStringNode,
     "custom/convert/to_number": ToNumberNode,

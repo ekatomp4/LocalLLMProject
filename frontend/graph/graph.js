@@ -2,6 +2,8 @@ import NodeList from "./nodes/NodeList.js";
 import GraphManager from "./GraphManager.js";
 
 LiteGraph.clearRegisteredTypes();
+LiteGraph.NODE_TEXT_Y = 20;       // pushes node title down
+LiteGraph.NODE_SLOT_HEIGHT = 20;  // space between slots
 for (const [key, value] of Object.entries(NodeList)) {
     LiteGraph.registerNodeType(key, value);
 }

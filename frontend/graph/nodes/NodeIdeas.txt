@@ -12,8 +12,6 @@ custom/string/concat — joins two strings with optional separator
 custom/string/template — handlebars-style "Hello {{name}}" with input slots
 custom/string/split — splits string by delimiter, outputs array
 custom/string/regex — match/replace with a regex pattern
-custom/string/json_parse — parses a JSON string into an object
-custom/string/json_stringify — serializes an object to JSON string
 
 Math
 
@@ -72,3 +70,10 @@ custom/meta/graph_loader — deserializes and loads a graph from JSON
 custom/meta/eval — executes an arbitrary JS string (dangerous, sandbox carefully)
 
 The most important ones for a self-expanding AI system are the meta nodes and the ai nodes — together they let the LLM inspect the graph, decide what nodes to add, spawn them, and wire them up programmatically. graph_snapshot + llm_call + node_spawner + connect_nodes is the core loop for self-modification.
+
+LOCAL STORAGE CONTROLS
+
+Done:
+
+custom/string/json_parse — parses a JSON string into an object
+custom/string/json_stringify — serializes an object to JSON string
