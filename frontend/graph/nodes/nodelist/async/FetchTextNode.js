@@ -1,4 +1,4 @@
-import AsyncNode from "../templates/AsyncNode.js";
+import AsyncNode from "../../templates/AsyncNode.js";
 
 class FetchTextNode extends AsyncNode {
     constructor() {
@@ -8,7 +8,7 @@ class FetchTextNode extends AsyncNode {
                 return await res.text();
             } catch (err) {
                 console.error(err);
-                return "Error fetching URL";
+                return `Error fetching URL (${url}): ${err.code || err.message}`;
             }
         }, "string", "string");
     }

@@ -26,7 +26,7 @@ export default class AsyncNode {
 
     onExecute() {
         const input = this.getInputData(0);
-        if (input === undefined) return;
+        if (input === undefined || input === null || !this._asyncFn || input === "") return;
 
         if (input !== this._lastInput && !this._pending) {
             this._lastInput = input;
@@ -35,6 +35,7 @@ export default class AsyncNode {
             this._asyncFn(input)
                 .then(result => {
                     this._displayValue = result;
+                    if(result === null || result === undefined) return;
                     this.setOutputData(0, result);
                     this.isError = false;
                 })
@@ -51,9 +52,9 @@ export default class AsyncNode {
     }
 
     onDrawBackground(ctx) {
-        ctx.fillStyle = this.isError   ? "#aa4444"
-                      : this._pending  ? "#4444aa"
-                      :                  "#222";
+        ctx.fillStyle = this.isError   ? window.graphColors.error
+                      : this._pending  ? window.graphColors.processing
+                      :                  window.graphColors.default;
 
         ctx.fillRect(0, 0, this.size[0], this.size[1]);
 

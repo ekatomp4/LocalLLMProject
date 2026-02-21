@@ -2,46 +2,76 @@ import NodeList from "./nodes/NodeList.js";
 import GraphManager from "./GraphManager.js";
 
 LiteGraph.clearRegisteredTypes();
-LiteGraph.NODE_TEXT_Y = 20;       // pushes node title down
-LiteGraph.NODE_SLOT_HEIGHT = 20;  // space between slots
+LiteGraph.NODE_TEXT_Y = 20;
+LiteGraph.NODE_SLOT_HEIGHT = 20;
 for (const [key, value] of Object.entries(NodeList)) {
     LiteGraph.registerNodeType(key, value);
 }
 
-const graph = new window.LGraph();
+window.graphColors = {
+    partial: "#449caa",
+    processing: "#4444aa",
+    error: "#aa4444",
+    default: "#222",
+}
 
-const canvas = new LGraphCanvas("#mycanvas", graph);
+const graph = new window.LGraph();
+const canvas = new LGraphCanvas("#graphcanvas", graph);
 window.__lgCanvas = canvas;
 
-canvas.onNodeRemoved = function(node) {
-    node.onRemoved?.();
-};
-
+canvas.onNodeRemoved = function(node) { node.onRemoved?.(); };
 canvas.allow_searchbox = false;
 canvas.config && (canvas.config.enableCanvasDoubleClick = false);
 canvas.onShowNodePanel = () => {};
 LGraphCanvas.prototype.processNodeDblClicked = function() {};
 
-// ===== DEFAULT NODES =====
-const textNode = LiteGraph.createNode("custom/text/text_input");
-textNode.properties.value = "http://localhost:6555/api/ping";
-textNode.widgets[0].value = "http://localhost:6555/api/ping";
-textNode.pos = [100, 200];
-graph.add(textNode);
+// ===== SAVE / LOAD =====
+function saveGraph() {
+    const json = JSON.stringify(graph.serialize());
+    localStorage.setItem("lgraph_save", json);
+}
 
-const fetchNode = LiteGraph.createNode("custom/async/fetch_text");
-fetchNode.pos = [350, 200];
-graph.add(fetchNode);
+function loadGraph() {
+    const json = localStorage.getItem("lgraph_save");
+    if (!json) return false;
+    graph.configure(JSON.parse(json));
+    return true;
+}
 
-const outputNode = LiteGraph.createNode("custom/text/text_output");
-outputNode.pos = [600, 200];
-graph.add(outputNode);
+document.addEventListener("keydown", (e) => {
+    if (e.key.toLowerCase() === "s" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); saveGraph(); }
+    if (e.key.toLowerCase() === "l" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); loadGraph(); }
+}, true);
 
-textNode.connect(0, fetchNode, 0);
-fetchNode.connect(0, outputNode, 0);
+window.saveGraph = saveGraph;
+window.loadGraph = loadGraph;
+
+// ===== DEFAULT NODES (only if no save exists) =====
+const hasSave = loadGraph();
+if (!hasSave) {
+    const textNode = LiteGraph.createNode("custom/text/input/text_input");
+    textNode.properties.value = "http://localhost:6555/api/ping";
+    textNode.widgets[0].value = "http://localhost:6555/api/ping";
+    textNode.pos = [100, 200];
+    graph.add(textNode);
+
+    const fetchNode = LiteGraph.createNode("custom/async/fetch_text");
+    fetchNode.pos = [350, 200];
+    graph.add(fetchNode);
+
+    const outputNode = LiteGraph.createNode("custom/text/output/text_output");
+    outputNode.pos = [600, 200];
+    graph.add(outputNode);
+
+    textNode.connect(0, fetchNode, 0);
+    fetchNode.connect(0, outputNode, 0);
+}
 
 // ===== START GRAPH =====
-graph.start(1000); // execute graph every 1000 ms (1 second)
+graph.start(1000);
+
+// Auto-save every 5 seconds
+setInterval(saveGraph, 5000);
 
 // ===== RESIZE HANDLER =====
 function resizeGraph() {
@@ -126,7 +156,7 @@ canvas.canvas.addEventListener("contextmenu", (e) => {
     const y = Math.min(e.clientY, window.innerHeight - menuHeight - 10);
 
     contextMenu.style.left = `${x - mainRect.left}px`;
-    contextMenu.style.top = `${y - mainRect.top}px`;
+    contextMenu.style.top  = `${y - mainRect.top}px`;
     contextMenu.style.display = "block";
 
     const graphPos = canvas.convertEventToCanvasOffset(e);

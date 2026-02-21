@@ -5,6 +5,7 @@ export default class MultilineTextOutputNode {
         this.properties = { value: "" };
         this.size = [400, 200];
         this._div = null;
+        this._lastSyncKey = null;
     }
 
     static title = "Multiline Text Output";
@@ -21,49 +22,37 @@ export default class MultilineTextOutputNode {
 
     _createDiv() {
         const div = document.createElement("div");
-        div.style.cssText = `
-            position: fixed;
-            background: #1a1a1a;
-            color: #cccccc;
-            border: 1px solid #444;
-            font: 12px monospace;
-            padding: 8px;
-            box-sizing: border-box;
-            overflow-y: auto;
-            overflow-x: hidden;
-            white-space: pre-wrap;
-            word-break: break-word;
-            z-index: 10;
-            pointer-events: auto;
-            line-height: 1.5;
-        `;
+        div.classList.add("multiline-text");
         document.querySelector("#main").appendChild(div);
         this._div = div;
     }
 
     _syncDiv() {
         if (!this._div) return;
-
+    
         const lg = window.__lgCanvas;
-        const canvasEl = document.querySelector("#mycanvas");
+        const canvasEl = document.querySelector("#graphcanvas");
         const rect = canvasEl.getBoundingClientRect();
         const ds = lg.ds ?? {};
         const scale = ds.scale ?? 1;
         const offset = ds.offset ?? [0, 0];
-
+    
         const x = rect.left + (this.pos[0] + offset[0]) * scale;
         const y = rect.top + (this.pos[1] + offset[1]) * scale;
         const w = this.size[0] * scale;
         const h = this.size[1] * scale;
         const titleH = 20 * scale;
-
-        this._div.style.left   = `${x}px`;
-        this._div.style.top    = `${y + titleH}px`;
-        this._div.style.width  = `${w}px`;
-        this._div.style.height = `${h}px`;
+    
+        const key = `${x},${y},${w},${h},${scale},${this.properties.value}`;
+        if (key === this._lastSyncKey) return;
+        this._lastSyncKey = key;
+    
+        this._div.style.left     = `${x}px`;
+        this._div.style.top      = `${y + titleH}px`;
+        this._div.style.width    = `${w}px`;
+        this._div.style.height   = `${h}px`;
         this._div.style.fontSize = `${Math.max(10, 12 * scale)}px`;
-
-        this._div.textContent = this.properties.value || "";
+        this._div.textContent    = this.properties.value || "";
     }
 
     onDrawBackground(ctx) {

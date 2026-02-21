@@ -1,5 +1,11 @@
 const OLLAMA_URL = process.env.OLLAMA_HOST ?? "http://localhost:11434";
 
+const BEST_FIT_MODELS = {
+    "small": "gemma3:1b",
+    "medium": "dolphin3:latest",
+    "embedding": "qwen3-embedding:4b",
+}
+
 // ===== LLMOptions ==========================================================
 export class LLMOptions {
     constructor({
@@ -83,7 +89,7 @@ export class LLMConnector {
      * @param {string} model
      * @param {LLMOptions|object} options
      */
-    constructor(model = "dolphin3:latest", options = new LLMOptions()) {
+    constructor(model = BEST_FIT_MODELS.small, options = new LLMOptions()) {
         this.model   = model;
         this.options = options instanceof LLMOptions ? options : new LLMOptions(options);
 
@@ -430,3 +436,14 @@ export class LLMConnector {
 }
 
 export default LLMConnector;
+
+/*
+async chatWithMemory(userMessage, memoryStore, topK = 3) {
+    const relevant = await memoryStore.search(userMessage, topK);
+    const context  = relevant.map(m => m.text).join("\n");
+    const systemPrompt = `Relevant context:\n${context}`;
+    const reply = await this.chat(userMessage, { systemPrompt });
+    await memoryStore.add(`User: ${userMessage}\nAssistant: ${reply}`);
+    return reply;
+}
+*/

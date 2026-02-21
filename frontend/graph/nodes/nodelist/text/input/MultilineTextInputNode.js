@@ -67,7 +67,7 @@ export default class MultilineTextInputNode {
         this._editing = true;
 
         const lg = window.__lgCanvas;
-        const canvasEl = document.querySelector("#mycanvas");
+        const canvasEl = document.querySelector("#graphcanvas");
         const rect = canvasEl.getBoundingClientRect();
 
         // Safely extract scale and offset from wherever LiteGraph puts them
@@ -119,6 +119,11 @@ export default class MultilineTextInputNode {
             this._editing = false;
             this.setDirtyCanvas(true);
         };
+
+        ta.addEventListener("input", () => {
+            this.properties.value = ta.value;
+            this.setDirtyCanvas(true);
+        });
 
         ta.addEventListener("blur", close);
 
